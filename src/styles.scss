@@ -1,1 +1,69 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --height: 58px;
+
+  --green: #2dae52;
+  --darkgreen: #256f3a;
+  --color0: #ec9b8b;
+  --color1: #d9ed92;
+  --color2: #b5e48c;
+  --color3: #99d98c;
+  --color4: #76c893;
+  --color5: #52b69a;
+  --color6: #34a0a4;
+  --color7: #168aad;
+  --color8: #1a759f;
+  --color9: #1e6091;
+  --color10: #184e77;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.12s ease-in-out;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+img {
+  height: 100%;
+}

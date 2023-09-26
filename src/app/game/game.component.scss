@@ -1,0 +1,134 @@
+#game {
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+  gap: 1rem;
+  .right {
+    padding: 0.5rem;
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 1rem;
+    align-self: baseline;
+    .header {
+      position: relative;
+      overflow: hidden;
+      .player-avt {
+        position: absolute;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        gap: 0.5rem;
+        img {
+          box-shadow: 0 0 8px var(--color1);
+        }
+      }
+      .player1-avt {
+        left: 0;
+        border-radius: 8px 0 0 8px;
+        justify-content: start;
+      }
+      .player2-avt {
+        right: 0;
+        border-radius: 0 8px 8px 0;
+        justify-content: end;
+      }
+      .player-black {
+        background-color: #222;
+        color: #ddd;
+      }
+      .player-white {
+        background-color: #ddd;
+        color: #222;
+      }
+      .versus-img {
+        text-align: center;
+        height: 100px;
+        position: relative;
+        z-index: 1;
+      }
+      img {
+        height: 100%;
+      }
+      .player-text {
+        flex: 1;
+      }
+      .your-turn {
+        padding: 10px;
+        font-size: 26px;
+        font-weight: bolder;
+        text-shadow: 0 0 8px var(--color5), 0 0 16px var(--color1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
+.board {
+  display: inline-grid;
+  grid-template-columns: repeat(8, auto);
+  gap: 0.2rem;
+  background-color: #333;
+  opacity: 0.9;
+  box-shadow: 0 0 6px var(--color1), 0 0 12px var(--color2);
+  border-radius: 4px;
+}
+.cell {
+  background-color: var(--green);
+  border-radius: 4px;
+  height: var(--height);
+  aspect-ratio: 1/1;
+  position: relative;
+  transition: background-color 0.1s ease-in-out;
+  &:hover {
+    background-color: var(--darkgreen);
+  }
+  &:not(:disabled) {
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      inset: calc(var(--height) / 3);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      background-color: #33333375;
+    }
+  }
+}
+.piece {
+  display: inline-block;
+  border-radius: 50%;
+  position: absolute;
+  inset: 5px;
+  box-shadow: -2px 5px 4px #333;
+  &.black {
+    background-color: #000;
+  }
+  &.white {
+    background-color: #fff;
+  }
+}
+.control-btn-ctn {
+  padding: 1rem 0;
+  button {
+    background-color: var(--color6);
+    &:hover {
+      background-color: var(--color1);
+      color: #333;
+    }
+  }
+}
+#background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../../assets/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.15;
+}

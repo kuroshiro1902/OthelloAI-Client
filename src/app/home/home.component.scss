@@ -1,0 +1,70 @@
+#home-background {
+  background-image: url("../../assets/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: fixed;
+  inset: 0;
+  padding: 2rem;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: -1;
+  }
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding-bottom: 2rem;
+    & > * {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    button {
+      font-size: 28px;
+      font-weight: bolder;
+      padding: 24px;
+      min-width: 360px;
+      border: 2px solid var(--green);
+      animation: zoom 2.5s ease-in-out infinite;
+      background-image: linear-gradient(
+        to right,
+        var(--color1),
+        var(--color3),
+        var(--color5),
+        var(--color6)
+      );
+      color: var(--color9);
+      &:hover {
+        background-image: linear-gradient(
+          to left,
+          var(--color0),
+          var(--color1),
+          var(--color2),
+          var(--color3)
+        );
+        box-shadow: 0 0 4px var(--color0), 0 0 8px var(--color2);
+        color: var(--color0);
+        border: 2px solid var(--color0);
+      }
+    }
+  }
+}
+@keyframes zoom {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.05;
+  }
+  100% {
+    scale: 1;
+  }
+}
+.copyright {
+  display: flex;
+  justify-content: space-between;
+}

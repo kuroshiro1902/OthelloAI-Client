@@ -1,0 +1,47 @@
+<div id="background"></div>
+<div id="game">
+  <div class="left">
+    <div class="board">
+      <ng-container *ngFor="let row of cells; let i = index">
+        <ng-container *ngFor="let cell of row; let j = index">
+          <button
+            class="cell"
+            [disabled]="!!!findCellInValidMoves(cell)"
+            (click)="
+              !!findCellInValidMoves(cell) ? handleMove($event) : undefined
+            "
+          >
+            <span
+              *ngIf="cell.piece !== 'EMPTY'"
+              [class]="'piece ' + cell.piece | lowercase"
+            ></span>
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="control-btn-ctn">
+      <button>Start</button>
+    </div>
+  </div>
+  <div class="right">
+    <div class="header">
+      <div class="player-avt player1-avt player-black">
+        <img src="assets/avatar.png" alt="Player1" />
+        <div class="player-text">
+          <p class="player-name">YOU</p>
+          <div class="your-turn">YOUR TURN!</div>
+        </div>
+      </div>
+      <div class="versus-img">
+        <img src="assets/versus.png" alt="versus" />
+      </div>
+      <div class="player-avt player2-avt player-white">
+        <div class="player-text">
+          <p style="text-align: end">AI</p>
+          <div class="your-turn">YOUR TURN!</div>
+        </div>
+        <img src="assets/AI.jpg" alt="Player2" />
+      </div>
+    </div>
+  </div>
+</div>
