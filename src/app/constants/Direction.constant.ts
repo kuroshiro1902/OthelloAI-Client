@@ -1,4 +1,4 @@
-import { Direction as IDirection } from "../models/Direction.model";
+import { IDirection } from '../models/Direction.model';
 const Direction: Record<string, IDirection> = {
   TOPLEFT: { dx: -1, dy: -1 },
   TOP: { dx: -1, dy: 0 },

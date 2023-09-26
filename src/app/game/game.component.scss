@@ -1,5 +1,5 @@
 #game {
-  max-width: 1400px;
+  // max-width: 1400px;
   margin: auto;
   display: flex;
   flex-wrap: wrap;
@@ -8,9 +8,11 @@
   .right {
     padding: 0.5rem;
     flex: 1;
-    background-color: rgba(0, 0, 0, 0.6);
+    // background-color: rgba(0, 0, 0, 0.6);
     border-radius: 1rem;
-    align-self: baseline;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     .header {
       position: relative;
       overflow: hidden;
@@ -72,10 +74,16 @@
   display: inline-grid;
   grid-template-columns: repeat(8, auto);
   gap: 0.2rem;
-  background-color: #333;
+  background-color: #222;
   opacity: 0.9;
+  margin: 1rem 0;
   box-shadow: 0 0 6px var(--color1), 0 0 12px var(--color2);
-  border-radius: 4px;
+  // box-shadow: 0 0 6px #000, 0 0 8px #000, 0 0 16px #000;
+  border-radius: 6px;
+  border-right: 1rem solid #403f3f;
+  border-left: 1rem solid #101010;
+  border-top: 1rem solid #272727;
+  border-bottom: 1rem solid #292828;
 }
 .cell {
   background-color: var(--green);
@@ -98,6 +106,12 @@
       background-color: #33333375;
     }
   }
+  .index {
+    position: absolute;
+    color: #00000050;
+    top: 2px;
+    left: 4px;
+  }
 }
 .piece {
   display: inline-block;
@@ -112,16 +126,7 @@
     background-color: #fff;
   }
 }
-.control-btn-ctn {
-  padding: 1rem 0;
-  button {
-    background-color: var(--color6);
-    &:hover {
-      background-color: var(--color1);
-      color: #333;
-    }
-  }
-}
+
 #background {
   position: fixed;
   inset: 0;
@@ -130,5 +135,64 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  opacity: 0.15;
+  opacity: 0.1;
+}
+.moves-history {
+  width: 100%;
+  padding: 4px;
+  height: 130px;
+  font-size: 13px;
+  overflow: auto;
+  border: 1px solid var(--color2);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  position: relative;
+  box-shadow: 0 0 8px var(--color1);
+  background-image: url("../../assets/moves_history.png");
+  background-position: center;
+  background-size: cover;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    // z-index: -1;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  span {
+    position: relative;
+    margin: 4px;
+    z-index: 1;
+    color: #fff;
+  }
+}
+.main-control {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  .control-left {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    button {
+      background-color: var(--color6);
+      &:hover {
+        background-color: var(--color1);
+        color: #333;
+      }
+    }
+    .hard-level {
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: var(--color6);
+      font-family: inherit;
+    }
+  }
+  .control-right {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+  }
 }

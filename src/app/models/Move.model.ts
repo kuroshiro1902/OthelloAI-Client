@@ -1,9 +1,9 @@
-import { Player } from "../constants/Player.constant";
-import { Cell } from "./Cell.model";
+import { Player } from '../constants/Player.constant';
+import { ICell } from './Cell.model';
 
-export default interface Move {
+export interface IMove {
   player?: Player;
-  froms: Cell[];
-  to: Cell;
-  flips: Cell[];
+  froms: ICell[];
+  to: ICell;
+  flips: ICell[];
 }

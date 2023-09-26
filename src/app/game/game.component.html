@@ -1,6 +1,9 @@
 <div id="background"></div>
 <div id="game">
   <div class="left">
+    <div class="moves-history">
+      <span>1.B25*d2d3d4 </span><span>2.Wc8*c3c4c5c6c7</span>
+    </div>
     <div class="board">
       <ng-container *ngFor="let row of cells; let i = index">
         <ng-container *ngFor="let cell of row; let j = index">
@@ -15,12 +18,11 @@
               *ngIf="cell.piece !== 'EMPTY'"
               [class]="'piece ' + cell.piece | lowercase"
             ></span>
+            <small *ngIf="j == 0 && i !== 0" class="index">{{ i }}</small>
+            <small *ngIf="i == 0" class="index">{{ j }}</small>
           </button>
         </ng-container>
       </ng-container>
-    </div>
-    <div class="control-btn-ctn">
-      <button>Start</button>
     </div>
   </div>
   <div class="right">
@@ -42,6 +44,29 @@
         </div>
         <img src="assets/AI.jpg" alt="Player2" />
       </div>
+    </div>
+    <div class="main-control">
+      <div class="control-left">
+        <ng-container [ngSwitch]="1 > 0">
+          <ng-container *ngSwitchCase="true">
+            <button><< Prev</button>
+
+            <button>Next >></button>
+          </ng-container>
+          <ng-container *ngSwitchCase="false">
+            <button>Start</button>
+          </ng-container>
+        </ng-container>
+        <br />
+        <span>Level </span>
+        <select class="hard-level">
+          <option value="1">Easy</option>
+          <option value="2">Medium</option>
+          <option value="3">Hard</option>
+          <option value="4">Expert</option>
+        </select>
+      </div>
+      <div class="control-right"></div>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameFacade } from './game.facade';
-import { Cell } from '../models/Cell.model';
-import Move from '../models/Move.model';
+import { ICell } from '../models/Cell.model';
+import { IMove } from '../models/Move.model';
 import { findCellInValidMoves } from '../utils/cell.util';
 
 @Component({
@@ -10,8 +10,8 @@ import { findCellInValidMoves } from '../utils/cell.util';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  cells: Cell[][] = [];
-  validMoves: Move[] = [];
+  cells: ICell[][] | null = [];
+  validMoves: IMove[] = [];
   constructor(private gameFacade: GameFacade) {}
   ngOnInit() {
     this.gameFacade.cells$.subscribe((res) => (this.cells = res));
@@ -20,7 +20,7 @@ export class GameComponent implements OnInit {
   initial() {
     this.gameFacade.initial();
   }
-  findCellInValidMoves(cell: Cell) {
+  findCellInValidMoves(cell: ICell) {
     return findCellInValidMoves(cell, this.validMoves);
   }
   handleMove(event: any) {

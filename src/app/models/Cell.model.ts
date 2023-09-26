@@ -1,7 +1,7 @@
-import { Player } from "../constants/Player.constant";
+import { Player } from '../constants/Player.constant';
 
-export interface Cell{
+export interface ICell {
   x: number;
   y: number;
-  piece: Player
+  piece: Player;
 }
