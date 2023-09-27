@@ -5,14 +5,12 @@
       <span>1.B25*d2d3d4 </span><span>2.Wc8*c3c4c5c6c7</span>
     </div>
     <div class="board">
-      <ng-container *ngFor="let row of cells; let i = index">
+      <ng-container *ngFor="let row of gameStats?.cells; let i = index">
         <ng-container *ngFor="let cell of row; let j = index">
           <button
             class="cell"
             [disabled]="!!!findCellInValidMoves(cell)"
-            (click)="
-              !!findCellInValidMoves(cell) ? handleMove($event) : undefined
-            "
+            (click)="!!findCellInValidMoves(cell) ? handleMove() : undefined"
           >
             <span
               *ngIf="cell.piece !== 'EMPTY'"
@@ -59,7 +57,7 @@
         </ng-container>
         <br />
         <span>Level </span>
-        <select class="hard-level">
+        <select class="choose-level">
           <option value="1">Easy</option>
           <option value="2">Medium</option>
           <option value="3">Hard</option>

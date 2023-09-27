@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { QueryService } from './query.service';
 import { Observable } from 'rxjs';
-import { ICell } from '../models/Cell.model';
+import { Player } from '../constants/Player.constant';
+import { IGameStats } from '../models/GameStats.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InitialService {
   constructor(private queryService: QueryService) {}
-  initial(): Observable<ICell[][]> {
-    return this.queryService.get('initialize');
+  initial(currentPlayer: Player): Observable<IGameStats> {
+    return this.queryService.post('initialize', { currentPlayer });
   }
 }

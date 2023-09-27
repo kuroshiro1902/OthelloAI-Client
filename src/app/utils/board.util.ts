@@ -1,5 +1,5 @@
 import { Player } from '../constants/Player.constant';
-import { Cell } from '../models/Cell.model';
+import { ICell } from '../models/Cell.model';
 
 const DecodeCellMapping: { [key: string]: Player } = {
   x: Player.EMPTY,
@@ -14,7 +14,7 @@ const EncodeCellMapping = {
 export const boardUtil = {
   decode(boardEncodeString: string) {
     const _boardEncodeString = boardEncodeString.padEnd(64, 'x');
-    const cells: Cell[][] = [];
+    const cells: ICell[][] = [];
 
     for (let i = 0; i < 8; i++) {
       const row = Array.from(
@@ -34,7 +34,7 @@ export const boardUtil = {
 
     return cells;
   },
-  encode(cells: Cell[][]) {
+  encode(cells: ICell[][]) {
     let boardEncodeString = '';
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
