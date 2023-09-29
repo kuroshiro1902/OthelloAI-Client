@@ -1,47 +1,92 @@
 <div id="background"></div>
 <div id="game">
-  <div class="left">
-    <div class="board">
-      <ng-container *ngFor="let row of cells; let i = index">
-        <ng-container *ngFor="let cell of row; let j = index">
-          <button
-            class="cell"
-            [disabled]="!!!findCellInValidMoves(cell)"
-            (click)="
-              !!findCellInValidMoves(cell) ? handleMove($event) : undefined
-            "
-          >
-            <span
-              *ngIf="cell.piece !== 'EMPTY'"
-              [class]="'piece ' + cell.piece | lowercase"
-            ></span>
-          </button>
-        </ng-container>
-      </ng-container>
-    </div>
-    <div class="control-btn-ctn">
-      <button>Start</button>
-    </div>
-  </div>
-  <div class="right">
+  <div class="container left"></div>
+  <div class="container center">
     <div class="header">
-      <div class="player-avt player1-avt player-black">
+      <div
+        [ngClass]="'player-avt player1-avt player-' + playerColor | lowercase"
+      >
         <img src="assets/avatar.png" alt="Player1" />
         <div class="player-text">
           <p class="player-name">YOU</p>
-          <div class="your-turn">YOUR TURN!</div>
+          <div class="your-turn">
+            {{
+              isStarted && gameStats.currentPlayer === playerColor
+                ? "YOUR TURN!"
+                : ""
+            }}
+          </div>
         </div>
       </div>
       <div class="versus-img">
         <img src="assets/versus.png" alt="versus" />
       </div>
-      <div class="player-avt player2-avt player-white">
+      <div
+        [ngClass]="
+          'player-avt player2-avt player-' + (playerColor | enemy) | lowercase
+        "
+      >
         <div class="player-text">
           <p style="text-align: end">AI</p>
-          <div class="your-turn">YOUR TURN!</div>
+          <div class="your-turn">
+            {{
+              isStarted && gameStats.currentPlayer !== playerColor
+                ? "YOUR TURN!"
+                : ""
+            }}
+          </div>
         </div>
         <img src="assets/AI.jpg" alt="Player2" />
       </div>
+    </div>
+    <div class="board">
+      <ng-container *ngFor="let row of gameStats?.cells">
+        <ng-container *ngFor="let cell of row">
+          <button
+            class="cell"
+            [disabled]="!!!_findCellInValidMoves(cell)"
+            (click)="move(_findCellInValidMoves(cell))"
+          >
+            <span
+              *ngIf="cell.piece !== 'EMPTY'"
+              [class]="'piece ' + cell.piece | lowercase"
+            ></span>
+            <small *ngIf="cell.y == 0 && cell.x !== 0" class="index">{{
+              cell.x
+            }}</small>
+            <small *ngIf="cell.x == 0" class="index">{{ cell.y }}</small>
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="control-btns">
+      <select class="choose-level" [disabled]="isStarted">
+        <option value="1">Level: Easy</option>
+        <option value="2" selected>Level: Medium</option>
+        <option value="3">Level: Hard</option>
+        <option value="4">Level: Expert</option>
+      </select>
+      <ng-container [ngSwitch]="isStarted">
+        <ng-container *ngSwitchCase="true">
+          <button><< Prev</button>
+          <button>Next >></button>
+          <button (click)="startGame(false)">Stop</button>
+        </ng-container>
+        <ng-container *ngSwitchCase="false">
+          <select [(ngModel)]="playerColor" class="choose-level">
+            <ng-container *ngFor="let opt of optPlayer">
+              <option [ngValue]="opt.value" selected>{{ opt.label }}</option>
+            </ng-container>
+          </select>
+          <button (click)="startGame(true)">Start</button>
+        </ng-container>
+      </ng-container>
+      <br />
+    </div>
+  </div>
+  <div class="container right">
+    <div class="main-control">
+      <div class="control-right"></div>
     </div>
   </div>
 </div>
