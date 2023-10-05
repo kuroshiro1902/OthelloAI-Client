@@ -1,0 +1,13 @@
+#overlay {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-size: 28px;
+  font-weight: bolder;
+}

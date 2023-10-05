@@ -1,5 +1,5 @@
-import { Player } from '../constants/Player.constant';
-import { ICell } from '../models/Cell.model';
+import { Player } from '../shared/constants/Player.constant';
+import { ICell } from '../shared/models/Cell.model';
 
 const DecodeCellMapping: { [key: string]: Player } = {
   x: Player.EMPTY,

@@ -6,12 +6,12 @@ import {
   filter,
 } from 'rxjs';
 import { InitialService } from '../services/initial.service';
-import { ICell } from '../models/Cell.model';
-import { IPlayer } from '../models/Player.model';
-import { IMove } from '../models/Move.model';
+import { ICell } from '../shared/models/Cell.model';
+import { IPlayer } from '../shared/models/Player.model';
+import { IMove } from '../shared/models/Move.model';
 import { MoveService } from '../services/move.service';
-import { Player } from '../constants/Player.constant';
-import { IGameStats } from '../models/GameStats.model';
+import { Player } from '../shared/constants/Player.constant';
+import { IGameStats } from '../shared/models/GameStats.model';
 
 @Injectable({
   providedIn: 'root',
@@ -50,20 +50,16 @@ export class GameFacade {
   }
 
   initial(currentPlayer: Player) {
-    this.initialService.initial(currentPlayer).subscribe((res) => {
-      this.gameStats = res;
-    });
+    return this.initialService.initial(currentPlayer);
   }
 
   move(cells: ICell[][], currentPlayer: Player, move: IMove | null) {
-    this.moveService.move(cells, currentPlayer, move).subscribe((res) => {
-      this.gameStats = res;
-    });
+    return this.moveService.move(cells, currentPlayer, move);
   }
 
   private _asObservable<T>(
-    subject: BehaviorSubject<T | null>
-  ): Observable<T | null> {
+    subject: BehaviorSubject<T | any>
+  ): Observable<T | any> {
     return subject.asObservable().pipe(
       filter((res: any) => res),
       distinctUntilChanged()

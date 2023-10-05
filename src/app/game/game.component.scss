@@ -1,10 +1,8 @@
 #game {
   // max-width: 1400px;
   margin: auto;
-  display: flex;
   flex-wrap: wrap;
   padding: 1rem;
-  gap: 1rem;
   min-height: 100vh;
   & > * {
     border-radius: 1rem;
@@ -16,9 +14,8 @@
   flex: 1;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 1rem;
-  display: flex;
   flex-direction: column;
-  gap: 1rem;
+  justify-content: space-between;
 }
 .container.center {
   display: flex;
@@ -137,30 +134,17 @@
   }
 }
 
-#background {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image: url("../../assets/background.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  opacity: 0.1;
-}
 .moves-history {
   width: 100%;
   padding: 4px;
-  height: 130px;
+  height: 200px;
   font-size: 13px;
-  overflow: auto;
+  overflow-y: auto;
   border: 1px solid var(--color2);
   border-radius: 4px;
   margin-bottom: 1rem;
   position: relative;
-  box-shadow: 0 0 8px var(--color1);
-  background-image: url("../../assets/moves_history.png");
-  background-position: center;
-  background-size: cover;
+  box-shadow: 0 0 4px var(--color1);
   &::after {
     content: "";
     position: absolute;
@@ -185,6 +169,12 @@
     &:hover {
       background-color: var(--color1);
       color: #333;
+    }
+    &:disabled {
+      cursor: default;
+      background-color: var(--color6);
+      color: initial;
+      opacity: 0.7;
     }
   }
   .choose-level {

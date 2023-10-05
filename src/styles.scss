@@ -67,3 +67,27 @@ button:focus-visible {
 img {
   height: 100%;
 }
+
+#background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("./assets/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.1;
+}
+
+.loading {
+  display: inline-block;
+  height: 200px;
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-normal {
+  gap: 1rem;
+}

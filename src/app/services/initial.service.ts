@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { QueryService } from './query.service';
 import { Observable } from 'rxjs';
-import { Player } from '../constants/Player.constant';
-import { IGameStats } from '../models/GameStats.model';
+import { Player } from '../shared/constants/Player.constant';
+import { IGameStats } from '../shared/models/GameStats.model';
 
 @Injectable({
   providedIn: 'root',

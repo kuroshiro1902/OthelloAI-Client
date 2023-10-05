@@ -1,6 +1,13 @@
 <div id="background"></div>
-<div id="game">
-  <div class="container left"></div>
+<app-overlay *ngIf="isInitialLoading">
+  <img class="loading" src="assets/loading.gif" />
+  <p>Loading...</p>
+</app-overlay>
+<div id="game" class="flex gap-normal">
+  <div class="container left flex gap-normal">
+    <div></div>
+    <div class="moves-history"></div>
+  </div>
   <div class="container center">
     <div class="header">
       <div
@@ -45,7 +52,7 @@
           <button
             class="cell"
             [disabled]="!!!_findCellInValidMoves(cell)"
-            (click)="move(_findCellInValidMoves(cell))"
+            (click)="move($event, _findCellInValidMoves(cell))"
           >
             <span
               *ngIf="cell.piece !== 'EMPTY'"
@@ -68,9 +75,23 @@
       </select>
       <ng-container [ngSwitch]="isStarted">
         <ng-container *ngSwitchCase="true">
-          <button><< Prev</button>
-          <button>Next >></button>
-          <button (click)="startGame(false)">Stop</button>
+          <button
+            [disabled]="isFetching || historyStackIndex - 1 <= -1"
+            (click)="prev()"
+          >
+            << Prev
+          </button>
+          <button
+            [disabled]="
+              isFetching || historyStackIndex + 1 >= historyStack.length
+            "
+            (click)="next()"
+          >
+            Next >>
+          </button>
+          <button (click)="startGame(false)" [disabled]="isFetching">
+            Stop
+          </button>
         </ng-container>
         <ng-container *ngSwitchCase="false">
           <select [(ngModel)]="playerColor" class="choose-level">
@@ -84,7 +105,7 @@
       <br />
     </div>
   </div>
-  <div class="container right">
+  <div class="container right flex gap-normal">
     <div class="main-control">
       <div class="control-right"></div>
     </div>
