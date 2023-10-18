@@ -5,8 +5,12 @@
 </app-overlay>
 <div id="game" class="flex gap-normal">
   <div class="container left flex gap-normal">
-    <div></div>
-    <div class="moves-history"></div>
+    <div class="field ntf">
+      <span>{{ ntf }}</span>
+    </div>
+    <div class="field moves-history">
+      <span>{{ historyString }}</span>
+    </div>
   </div>
   <div class="container center">
     <div class="header">
@@ -77,7 +81,7 @@
         <ng-container *ngSwitchCase="true">
           <button
             [disabled]="isFetching || historyStackIndex - 1 <= -1"
-            (click)="prev()"
+            (click)="changeHistory(-1)"
           >
             << Prev
           </button>
@@ -85,7 +89,7 @@
             [disabled]="
               isFetching || historyStackIndex + 1 >= historyStack.length
             "
-            (click)="next()"
+            (click)="changeHistory(1)"
           >
             Next >>
           </button>

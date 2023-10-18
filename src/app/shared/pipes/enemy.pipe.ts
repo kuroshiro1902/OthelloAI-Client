@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Player } from '../constants/Player.constant';
+import { EPlayer } from '../constants/Player.constant';
 
 @Pipe({
   name: 'enemy',
 })
 export class EnemyPipe implements PipeTransform {
-  transform(playerColor: Player | string): Player | string {
-    if (playerColor === Player.BLACK) return Player.WHITE;
-    return Player.BLACK;
+  transform(playerColor: EPlayer | string): EPlayer | string {
+    if (playerColor === EPlayer.BLACK) return EPlayer.WHITE;
+    return EPlayer.BLACK;
   }
 }

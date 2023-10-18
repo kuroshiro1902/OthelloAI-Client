@@ -10,7 +10,7 @@ import { ICell } from '../shared/models/Cell.model';
 import { IPlayer } from '../shared/models/Player.model';
 import { IMove } from '../shared/models/Move.model';
 import { MoveService } from '../services/move.service';
-import { Player } from '../shared/constants/Player.constant';
+import { EPlayer } from '../shared/constants/Player.constant';
 import { IGameStats } from '../shared/models/GameStats.model';
 
 @Injectable({
@@ -41,7 +41,7 @@ export class GameFacade {
     this._secondPlayer.next(value);
   }
 
-  get gameStats$() {
+  get gameStats$(): Observable<IGameStats> {
     return this._asObservable(this._gameStats);
   }
 
@@ -49,11 +49,11 @@ export class GameFacade {
     this._gameStats.next(value);
   }
 
-  initial(currentPlayer: Player) {
+  initial(currentPlayer: EPlayer) {
     return this.initialService.initial(currentPlayer);
   }
 
-  move(cells: ICell[][], currentPlayer: Player, move: IMove | null) {
+  move(cells: ICell[][], currentPlayer: EPlayer, move: IMove | null) {
     return this.moveService.move(cells, currentPlayer, move);
   }
 

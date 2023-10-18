@@ -1,5 +1,5 @@
-import { Player } from '../constants/Player.constant';
+import { EPlayer } from '../constants/Player.constant';
 
 export interface IPlayer {
-  player: Player;
+  player: EPlayer;
 }

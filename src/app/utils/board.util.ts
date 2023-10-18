@@ -1,15 +1,15 @@
-import { Player } from '../shared/constants/Player.constant';
+import { EPlayer } from '../shared/constants/Player.constant';
 import { ICell } from '../shared/models/Cell.model';
 
-const DecodeCellMapping: { [key: string]: Player } = {
-  x: Player.EMPTY,
-  b: Player.BLACK,
-  w: Player.WHITE,
+const DecodeCellMapping: { [key: string]: EPlayer } = {
+  x: EPlayer.EMPTY,
+  b: EPlayer.BLACK,
+  w: EPlayer.WHITE,
 };
 const EncodeCellMapping = {
-  [Player.EMPTY]: 'x',
-  [Player.BLACK]: 'b',
-  [Player.WHITE]: 'w',
+  [EPlayer.EMPTY]: 'x',
+  [EPlayer.BLACK]: 'b',
+  [EPlayer.WHITE]: 'w',
 };
 export const boardUtil = {
   decode(boardEncodeString: string) {

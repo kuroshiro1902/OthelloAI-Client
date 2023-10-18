@@ -133,18 +133,15 @@
     background-color: #fff;
   }
 }
-
-.moves-history {
+.field {
   width: 100%;
   padding: 4px;
-  height: 200px;
   font-size: 13px;
   overflow-y: auto;
   border: 1px solid var(--color2);
   border-radius: 4px;
   margin-bottom: 1rem;
   position: relative;
-  box-shadow: 0 0 4px var(--color1);
   &::after {
     content: "";
     position: absolute;
@@ -158,6 +155,18 @@
     z-index: 1;
     color: #fff;
   }
+}
+.ntf {
+  height: 60px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0 4px var(--color1);
+}
+.moves-history {
+  height: 200px;
+  box-shadow: 0 0 4px var(--color1);
 }
 .control-btns {
   padding-top: 1rem;
