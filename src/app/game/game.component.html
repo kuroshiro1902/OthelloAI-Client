@@ -55,8 +55,8 @@
         <ng-container *ngFor="let cell of row">
           <button
             class="cell"
-            [disabled]="!!!_findCellInValidMoves(cell)"
-            (click)="move($event, _findCellInValidMoves(cell))"
+            [disabled]="!!!findCellInValidMoves(cell)"
+            (click)="move($event, findCellInValidMoves(cell))"
           >
             <span
               *ngIf="cell.piece !== 'EMPTY'"
@@ -71,11 +71,12 @@
       </ng-container>
     </div>
     <div class="control-btns">
-      <select class="choose-level" [disabled]="isStarted">
-        <option value="1">Level: Easy</option>
-        <option value="2" selected>Level: Medium</option>
-        <option value="3">Level: Hard</option>
-        <option value="4">Level: Expert</option>
+      <select class="choose-level" [disabled]="isStarted" [(ngModel)]="depth">
+        <option [ngValue]="1">Level: Easy</option>
+        <option [ngValue]="2">Level: Medium</option>
+        <option [ngValue]="3">Level: Hard</option>
+        <option [ngValue]="4">Level: Expert</option>
+        <option [ngValue]="5">Level: Master</option>
       </select>
       <ng-container [ngSwitch]="isStarted">
         <ng-container *ngSwitchCase="true">
@@ -99,9 +100,8 @@
         </ng-container>
         <ng-container *ngSwitchCase="false">
           <select [(ngModel)]="playerColor" class="choose-level">
-            <ng-container *ngFor="let opt of optPlayer">
-              <option [ngValue]="opt.value" selected>{{ opt.label }}</option>
-            </ng-container>
+            <option [ngValue]="playerOpt.BLACK" selected>Play as: BLACK</option>
+            <option [ngValue]="playerOpt.WHITE">Play as: WHITE</option>
           </select>
           <button (click)="startGame(true)">Start</button>
         </ng-container>

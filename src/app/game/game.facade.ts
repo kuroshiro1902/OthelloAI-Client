@@ -12,6 +12,7 @@ import { IMove } from '../shared/models/Move.model';
 import { MoveService } from '../services/move.service';
 import { EPlayer } from '../shared/constants/Player.constant';
 import { IGameStats } from '../shared/models/GameStats.model';
+import { MinimaxService } from '../services/minimax.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class GameFacade {
   private _secondPlayer = new BehaviorSubject<IPlayer | null>(null);
   constructor(
     private initialService: InitialService,
-    private moveService: MoveService
+    private moveService: MoveService,
+    private minimaxService: MinimaxService
   ) {}
 
   get firstPlayer$() {
@@ -49,12 +51,37 @@ export class GameFacade {
     this._gameStats.next(value);
   }
 
-  initial(currentPlayer: EPlayer) {
-    return this.initialService.initial(currentPlayer);
+  initial(firstPlayer: EPlayer) {
+    return this.initialService.initial(firstPlayer);
   }
 
   move(cells: ICell[][], currentPlayer: EPlayer, move: IMove | null) {
     return this.moveService.move(cells, currentPlayer, move);
+  }
+
+  aiMove(gameStats: IGameStats, depth = 1) {
+    //Kiểm tra xem thuật toán hiện tại là gì thì chọn thuật toán đó
+    //if this.algorithm === "MINIMAX"
+    return this.minimax(
+      gameStats.cells,
+      depth,
+      gameStats.evaluationValue,
+      gameStats.currentPlayer
+    );
+  }
+
+  minimax(
+    cells: ICell[][],
+    depth = 1,
+    evaluationValue: number,
+    currentPlayer: EPlayer
+  ) {
+    return this.minimaxService.minimax(
+      cells,
+      depth,
+      evaluationValue,
+      currentPlayer
+    );
   }
 
   private _asObservable<T>(

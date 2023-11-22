@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameFacade } from './game.facade';
 import { ICell } from '../shared/models/Cell.model';
 import { IMove } from '../shared/models/Move.model';
-import { findCellInValidMoves } from '../utils/cell.util';
+import { findCellInValidMoves as _findCellInValidMoves } from '../utils/cell.util';
 import { EPlayer } from '../shared/constants/Player.constant';
 import { IGameStats } from '../shared/models/GameStats.model';
 import { ILabelValue } from '../shared/models/LabelValue.model';
@@ -14,10 +14,7 @@ import { IGameHistory } from '../shared/models/GameHistory.model';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  optPlayer: ILabelValue[] = [
-    { label: 'Play as: BLACK', value: EPlayer.BLACK },
-    { label: 'Play as: WHITE', value: EPlayer.WHITE },
-  ];
+  playerOpt = EPlayer;
 
   isInitialLoading = true;
   isFetching = false;
@@ -31,8 +28,7 @@ export class GameComponent implements OnInit {
   isStarted: boolean = false;
   playerColor: EPlayer = EPlayer.BLACK;
 
-  private _historyString: string = '';
-
+  depth: number = 1;
   constructor(private gameFacade: GameFacade) {}
 
   get historyString(): string {
@@ -63,6 +59,7 @@ export class GameComponent implements OnInit {
   initial() {
     this.isFetching = true;
     this.gameStats.currentPlayer = this.playerColor;
+    console.log(this.gameStats.currentPlayer);
     this.gameFacade.initial(this.playerColor).subscribe((res) => {
       this.gameFacade.gameStats = res;
       this._pushIntoHistoryStack({ gameStats: res });
@@ -85,8 +82,17 @@ export class GameComponent implements OnInit {
       this.gameFacade
         .move(this.gameStats.cells, this.gameStats.currentPlayer, move)
         .subscribe((res) => {
-          this.gameFacade.gameStats = res;
-          this._pushIntoHistoryStack({ gameStats: res, move });
+          this._updateAfterMove(res, move);
+          //if (mode === 'AI)
+          setTimeout(() => {
+            this.gameFacade.aiMove(res, this.depth).subscribe((minimaxRes) => {
+              this.gameFacade
+                .move(res.cells, res.currentPlayer, minimaxRes.bestMove)
+                .subscribe((aiRes) => {
+                  this._updateAfterMove(aiRes, minimaxRes.bestMove);
+                });
+            });
+          }, 1500);
         });
     }
   }
@@ -109,8 +115,13 @@ export class GameComponent implements OnInit {
   //     this.historyStack[this.historyStackIndex].gameStats;
   // }
 
-  _findCellInValidMoves(cell: ICell) {
-    return findCellInValidMoves(cell, this.gameStats!.validMoves ?? []);
+  findCellInValidMoves(cell: ICell) {
+    return _findCellInValidMoves(cell, this.gameStats!.validMoves ?? []);
+  }
+
+  private _updateAfterMove(res: IGameStats, move: IMove | null) {
+    this.gameFacade.gameStats = res;
+    this._pushIntoHistoryStack({ gameStats: res, move: move ?? undefined });
   }
 
   private _enable() {

@@ -9,7 +9,7 @@ import { IGameStats } from '../shared/models/GameStats.model';
 })
 export class InitialService {
   constructor(private queryService: QueryService) {}
-  initial(currentPlayer: EPlayer): Observable<IGameStats> {
-    return this.queryService.post('initialize', { currentPlayer });
+  initial(firstPlayer: EPlayer): Observable<IGameStats> {
+    return this.queryService.post('initialize', { firstPlayer });
   }
 }

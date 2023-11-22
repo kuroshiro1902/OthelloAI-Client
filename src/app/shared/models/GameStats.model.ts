@@ -6,5 +6,5 @@ export interface IGameStats {
   cells: ICell[][];
   currentPlayer: EPlayer;
   validMoves: IMove[];
-  // EvaluationValue;
+  evaluationValue: number;
 }
