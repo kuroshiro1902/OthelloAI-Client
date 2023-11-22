@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { GameModule } from './game/game.module';
 import { HomeModule } from './home/home.module';
+import { AuthModule } from './auth/auth.module';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -17,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     GameModule,
     HttpClientModule,
     FormsModule,
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
