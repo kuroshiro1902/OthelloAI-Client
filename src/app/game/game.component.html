@@ -3,10 +3,35 @@
   <img class="loading" src="assets/loading.gif" />
   <p>Loading...</p>
 </app-overlay>
+<app-overlay *ngIf="winMessage">
+  <pre class="win-message" [innerHTML]="winMessage"></pre>
+  <button (click)="startGame(false)">Done</button>
+</app-overlay>
 <div id="game" class="flex gap-normal">
   <div class="container left flex gap-normal">
     <div class="field ntf">
       <span>{{ ntf }}</span>
+    </div>
+    <div style="flex: 1">
+      <div class="main-left field">
+        <span
+          >Black: <a>{{ analytics.blackAmount }}</a></span
+        >
+        <span
+          >White: <a>{{ analytics.whiteAmount }}</a></span
+        >
+        <br />
+        <span
+          >Advantage: <a>{{ gameStats.evaluationValue }}</a>
+          <small style="margin-left: 4px; font-size: 12px">
+            ({{ advantageMessage }})</small
+          ></span
+        >
+        <br />
+        <span *ngIf="mode === 'ai'"
+          >Level: <a style="color: var(--color9)">{{ level }}</a></span
+        >
+      </div>
     </div>
     <div class="field moves-history">
       <span>{{ historyString }}</span>
@@ -19,7 +44,7 @@
       >
         <img src="assets/avatar.png" alt="Player1" />
         <div class="player-text">
-          <p class="player-name">YOU</p>
+          <p class="player-name">Player1</p>
           <div class="your-turn">
             {{
               isStarted && gameStats.currentPlayer === playerColor
@@ -38,7 +63,7 @@
         "
       >
         <div class="player-text">
-          <p style="text-align: end">AI</p>
+          <p style="text-align: end">Player2</p>
           <div class="your-turn">
             {{
               isStarted && gameStats.currentPlayer !== playerColor
@@ -50,68 +75,112 @@
         <img src="assets/AI.jpg" alt="Player2" />
       </div>
     </div>
-    <div class="board">
-      <ng-container *ngFor="let row of gameStats?.cells">
-        <ng-container *ngFor="let cell of row">
-          <button
-            class="cell"
-            [disabled]="!!!findCellInValidMoves(cell)"
-            (click)="move($event, findCellInValidMoves(cell))"
-          >
-            <span
-              *ngIf="cell.piece !== 'EMPTY'"
-              [class]="'piece ' + cell.piece | lowercase"
-            ></span>
-            <small *ngIf="cell.y == 0 && cell.x !== 0" class="index">{{
-              cell.x
-            }}</small>
-            <small *ngIf="cell.x == 0" class="index">{{ cell.y }}</small>
-          </button>
+    <div style="display: flex; justify-content: center">
+      <div class="board">
+        <ng-container *ngFor="let row of gameStats?.cells">
+          <ng-container *ngFor="let cell of row">
+            <button
+              [ngClass]="{
+                cell: true,
+                selected:
+                  selectedCell?.x === cell.x && selectedCell?.y === cell.y
+              }"
+              [disabled]="!!!findCellInValidMoves(cell)"
+              (click)="move($event, findCellInValidMoves(cell))"
+            >
+              <span
+                *ngIf="cell.piece !== 'EMPTY'"
+                [class]="'piece ' + cell.piece | lowercase"
+              ></span>
+              <small *ngIf="cell.y == 0 && cell.x !== 0" class="index">{{
+                cell.x
+              }}</small>
+              <small *ngIf="cell.x == 0" class="index">{{ cell.y }}</small>
+            </button>
+          </ng-container>
         </ng-container>
-      </ng-container>
-    </div>
-    <div class="control-btns">
-      <select class="choose-level" [disabled]="isStarted" [(ngModel)]="depth">
-        <option [ngValue]="1">Level: Easy</option>
-        <option [ngValue]="2">Level: Medium</option>
-        <option [ngValue]="3">Level: Hard</option>
-        <option [ngValue]="4">Level: Expert</option>
-        <option [ngValue]="5">Level: Master</option>
-      </select>
-      <ng-container [ngSwitch]="isStarted">
-        <ng-container *ngSwitchCase="true">
-          <button
-            [disabled]="isFetching || historyStackIndex - 1 <= -1"
-            (click)="changeHistory(-1)"
-          >
-            << Prev
-          </button>
-          <button
-            [disabled]="
-              isFetching || historyStackIndex + 1 >= historyStack.length
-            "
-            (click)="changeHistory(1)"
-          >
-            Next >>
-          </button>
-          <button (click)="startGame(false)" [disabled]="isFetching">
-            Stop
-          </button>
-        </ng-container>
-        <ng-container *ngSwitchCase="false">
-          <select [(ngModel)]="playerColor" class="choose-level">
-            <option [ngValue]="playerOpt.BLACK" selected>Play as: BLACK</option>
-            <option [ngValue]="playerOpt.WHITE">Play as: WHITE</option>
-          </select>
-          <button (click)="startGame(true)">Start</button>
-        </ng-container>
-      </ng-container>
-      <br />
+      </div>
     </div>
   </div>
   <div class="container right flex gap-normal">
     <div class="main-control">
-      <div class="control-right"></div>
+      <div class="control-right">
+        <h1>SETTINGS</h1>
+        <br />
+        <div class="control-btns">
+          <select class="select-btn" [disabled]="isStarted" [(ngModel)]="mode">
+            <option [ngValue]="'ai'">Play with AI</option>
+            <option [ngValue]="'human'">Play with human</option>
+            <option [ngValue]="'ai_ai'">AI vs AI</option>
+          </select>
+          <select
+            class="select-btn"
+            [disabled]="isStarted || mode === 'human'"
+            [(ngModel)]="depth"
+          >
+            <option [ngValue]="1">Level: Easy</option>
+            <option [ngValue]="2">Level: Medium</option>
+            <option [ngValue]="3">Level: Hard</option>
+            <option [ngValue]="4">Level: Expert</option>
+            <option [ngValue]="5">Level: Master</option>
+          </select>
+          <ng-container [ngSwitch]="isStarted">
+            <ng-container *ngSwitchCase="true">
+              <ng-container *ngIf="mode !== 'ai_ai'">
+                <br />
+                <button
+                  [disabled]="isFetching || historyStackIndex - 1 <= -1"
+                  (click)="changeHistory(-1)"
+                >
+                  << Prev
+                </button>
+                <button
+                  [disabled]="
+                    isFetching || historyStackIndex + 1 >= historyStack.length
+                  "
+                  (click)="changeHistory(1)"
+                >
+                  Next >>
+                </button>
+                <br />
+
+                <button (click)="startGame(false)" [disabled]="isFetching">
+                  Stop
+                </button>
+              </ng-container>
+              <ng-container *ngIf="mode === 'ai_ai'">
+                <br />
+                <button
+                  (click)="pauseGame()"
+                  [disabled]="isFetching || isPaused"
+                >
+                  Pause
+                </button>
+                <button
+                  (click)="continueGame()"
+                  [disabled]="isFetching || !isPaused"
+                >
+                  Continue
+                </button>
+                <button (click)="startGame(false)" [disabled]="isFetching">
+                  Stop
+                </button>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="false">
+              <select [(ngModel)]="playerColor" class="select-btn">
+                <option [ngValue]="playerOpt.BLACK" selected>
+                  Play as: BLACK
+                </option>
+                <option [ngValue]="playerOpt.WHITE">Play as: WHITE</option>
+              </select>
+              <p style="margin-bottom: 5.6rem"></p>
+              <button (click)="startGame(true)">Start</button>
+            </ng-container>
+          </ng-container>
+          <br />
+        </div>
+      </div>
     </div>
   </div>
 </div>

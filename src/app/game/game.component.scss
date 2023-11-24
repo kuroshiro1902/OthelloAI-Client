@@ -83,7 +83,7 @@
   gap: 0.2rem;
   background-color: #222;
   opacity: 0.9;
-  margin: 1rem 0;
+  margin: 1rem auto;
   box-shadow: 0 0 6px var(--color1), 0 0 12px var(--color2);
   // box-shadow: 0 0 6px #000, 0 0 8px #000, 0 0 16px #000;
   border-radius: 6px;
@@ -172,7 +172,13 @@
   padding-top: 1rem;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   gap: 0.5rem;
+  button,
+  select {
+    display: block;
+    padding: 1rem 1.4rem;
+  }
   button {
     background-color: var(--color6);
     &:hover {
@@ -186,8 +192,8 @@
       opacity: 0.7;
     }
   }
-  .choose-level {
-    padding: 0.6rem 1.2rem;
+  .select-btn {
+    // padding: 0.6rem 1.2rem;
     border-radius: 4px;
     cursor: pointer;
     background-color: var(--color6);
@@ -208,4 +214,25 @@
     flex: 1;
     border-radius: 8px;
   }
+}
+.main-left {
+  font-size: 16px;
+  height: 100%;
+  span {
+    display: block;
+  }
+  a {
+    color: var(--green);
+  }
+}
+.win-message {
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 4px var(--color2);
+  color: #222;
+}
+
+.cell.selected {
+  background-color: var(--color6) !important;
 }

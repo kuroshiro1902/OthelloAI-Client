@@ -16,7 +16,8 @@ export class MinimaxService {
     evaluationValue: number,
     currentPlayer: EPlayer
   ): Observable<IMinimaxResult> {
-    return this.queryService.post('minimax', {
+    return this.queryService.post('ai/minimax', {
+      // return this.queryService.post('minimax', {
       cells,
       depth,
       evaluationValue,
