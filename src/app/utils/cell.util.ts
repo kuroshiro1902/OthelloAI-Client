@@ -1,5 +1,5 @@
-import { ICell } from '../models/Cell.model';
-import { IMove } from '../models/Move.model';
+import { ICell } from '../shared/models/Cell.model';
+import { IMove } from '../shared/models/Move.model';
 
 export function findCellInValidMoves(cell: ICell, validMoves: IMove[]) {
   return validMoves.find(

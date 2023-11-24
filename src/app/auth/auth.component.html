@@ -1,0 +1,42 @@
+<div id="background"></div>
+<div class="container">
+  <div>
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      <h1>{{ mode | uppercase }}</h1>
+      <div class="form-group">
+        <label for="username"
+          >Username:
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            required
+            autocomplete="current-password"
+          />
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="password"
+          >Password:
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            required
+            autocomplete="current-password"
+          />
+        </label>
+      </div>
+      <div style="text-align: center">
+        <button type="submit">{{ mode | uppercase }}</button>
+      </div>
+      <p *ngIf="mode === 'login'">
+        Don't have an account?<a (click)="changeMode()"> Sign up here</a>
+      </p>
+      <p *ngIf="mode === 'signup'">
+        Already had an account?<a (click)="changeMode()"> Login here</a>
+      </p>
+    </form>
+  </div>
+</div>

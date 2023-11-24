@@ -6,12 +6,13 @@ import {
   filter,
 } from 'rxjs';
 import { InitialService } from '../services/initial.service';
-import { ICell } from '../models/Cell.model';
-import { IPlayer } from '../models/Player.model';
-import { IMove } from '../models/Move.model';
+import { ICell } from '../shared/models/Cell.model';
+import { IPlayer } from '../shared/models/Player.model';
+import { IMove } from '../shared/models/Move.model';
 import { MoveService } from '../services/move.service';
-import { Player } from '../constants/Player.constant';
-import { IGameStats } from '../models/GameStats.model';
+import { EPlayer } from '../shared/constants/Player.constant';
+import { IGameStats } from '../shared/models/GameStats.model';
+import { MinimaxService } from '../services/minimax.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class GameFacade {
   private _secondPlayer = new BehaviorSubject<IPlayer | null>(null);
   constructor(
     private initialService: InitialService,
-    private moveService: MoveService
+    private moveService: MoveService,
+    private minimaxService: MinimaxService
   ) {}
 
   get firstPlayer$() {
@@ -41,7 +43,7 @@ export class GameFacade {
     this._secondPlayer.next(value);
   }
 
-  get gameStats$() {
+  get gameStats$(): Observable<IGameStats> {
     return this._asObservable(this._gameStats);
   }
 
@@ -49,21 +51,42 @@ export class GameFacade {
     this._gameStats.next(value);
   }
 
-  initial(currentPlayer: Player) {
-    this.initialService.initial(currentPlayer).subscribe((res) => {
-      this.gameStats = res;
-    });
+  initial(firstPlayer: EPlayer) {
+    return this.initialService.initial(firstPlayer);
   }
 
-  move(cells: ICell[][], currentPlayer: Player, move: IMove | null) {
-    this.moveService.move(cells, currentPlayer, move).subscribe((res) => {
-      this.gameStats = res;
-    });
+  move(cells: ICell[][], currentPlayer: EPlayer, move: IMove | null) {
+    return this.moveService.move(cells, currentPlayer, move);
+  }
+
+  aiMove(gameStats: IGameStats, depth = 1) {
+    //Kiểm tra xem thuật toán hiện tại là gì thì chọn thuật toán đó
+    //if this.algorithm === "MINIMAX"
+    return this.minimax(
+      gameStats.cells,
+      depth,
+      gameStats.evaluationValue,
+      gameStats.currentPlayer
+    );
+  }
+
+  minimax(
+    cells: ICell[][],
+    depth = 1,
+    evaluationValue: number,
+    currentPlayer: EPlayer
+  ) {
+    return this.minimaxService.minimax(
+      cells,
+      depth,
+      evaluationValue,
+      currentPlayer
+    );
   }
 
   private _asObservable<T>(
-    subject: BehaviorSubject<T | null>
-  ): Observable<T | null> {
+    subject: BehaviorSubject<T | any>
+  ): Observable<T | any> {
     return subject.asObservable().pipe(
       filter((res: any) => res),
       distinctUntilChanged()

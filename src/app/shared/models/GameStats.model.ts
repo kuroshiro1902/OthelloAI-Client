@@ -1,10 +1,11 @@
-import { Player } from '../constants/Player.constant';
+import { EPlayer } from '../constants/Player.constant';
 import { ICell } from './Cell.model';
 import { IMove } from './Move.model';
+import { IPlayer } from './Player.model';
 
 export interface IGameStats {
   cells: ICell[][];
-  currentPlayer: Player;
+  currentPlayer: EPlayer;
   validMoves: IMove[];
-  // EvaluationValue;
+  evaluationValue: number;
 }

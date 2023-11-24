@@ -1,0 +1,33 @@
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+form {
+  padding: 16px;
+  border-radius: 6px;
+  width: 480px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  background-color: #00000080;
+  margin-top: 20%;
+}
+label {
+  display: flex;
+  justify-content: center;
+}
+input {
+  padding: 8px 4px;
+}
+h1 {
+  color: teal;
+  text-align: center;
+  font-size: 48px;
+  text-shadow: 4px 4px 4px yellowgreen;
+}
+a {
+  text-decoration: underline;
+  cursor: pointer;
+}
