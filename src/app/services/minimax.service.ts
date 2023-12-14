@@ -14,9 +14,10 @@ export class MinimaxService {
     cells: ICell[][],
     depth: number,
     evaluationValue: number,
-    currentPlayer: EPlayer
+    currentPlayer: EPlayer,
+    version: 'v1' | 'v2' = 'v2'
   ): Observable<IMinimaxResult> {
-    return this.queryService.post('ai/minimax', {
+    return this.queryService.post('ai/minimax/' + version, {
       // return this.queryService.post('minimax', {
       cells,
       depth,

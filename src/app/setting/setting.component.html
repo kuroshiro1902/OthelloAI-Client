@@ -1,0 +1,63 @@
+<div id="background"></div>
+
+<div class="main">
+  <p style="margin-bottom: 16px">
+    <button (click)="home()" style="background-color: var(--color9)">
+      Quay về trang chủ
+    </button>
+  </p>
+  <p style="display: flex; gap: 8px">
+    <button (click)="getDepthList()" style="background-color: var(--color6)">
+      Chỉnh sửa độ khó
+    </button>
+    <button
+      *ngIf="depthSetting"
+      (click)="resetDepth()"
+      style="background-color: var(--color5)"
+    >
+      Reset độ khó
+    </button>
+  </p>
+
+  <div style="padding-top: 32px">
+    <h2 *ngIf="depthSetting">Chỉnh sửa độ khó</h2>
+    <small *ngIf="depthSetting"
+      >Độ sâu tìm kiếm của thuật toán tương ứng với level.</small
+    >
+    <div *ngIf="depthSetting" style="margin-top: 16px">
+      <table>
+        <thead>
+          <th>Level</th>
+          <th>Độ sâu</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Easy</td>
+            <td>
+              <input type="number" [(ngModel)]="depthSetting.easy" />
+            </td>
+          </tr>
+          <tr>
+            <td>Medium</td>
+            <td>
+              <input type="number" [(ngModel)]="depthSetting.medium" />
+            </td>
+          </tr>
+          <tr>
+            <td>Hard</td>
+            <td>
+              <input type="number" [(ngModel)]="depthSetting.hard" />
+            </td>
+          </tr>
+          <tr>
+            <td>Master</td>
+            <td>
+              <input type="number" [(ngModel)]="depthSetting.master" />
+            </td>
+          </tr>
+        </tbody>
+        <button (click)="submitDepth()">submit</button>
+      </table>
+    </div>
+  </div>
+</div>

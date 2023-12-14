@@ -8,6 +8,7 @@ import { GameModule } from './game/game.module';
 import { HomeModule } from './home/home.module';
 import { AuthModule } from './auth/auth.module';
 import { FormsModule } from '@angular/forms';
+import { SettingModule } from './setting/setting.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
     AuthModule,
+    SettingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

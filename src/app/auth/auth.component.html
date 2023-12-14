@@ -28,6 +28,9 @@
           />
         </label>
       </div>
+      <p style="text-align: center">
+        <small *ngIf="error" style="color: crimson">{{ error }}</small>
+      </p>
       <div style="text-align: center">
         <button type="submit">{{ mode | uppercase }}</button>
       </div>

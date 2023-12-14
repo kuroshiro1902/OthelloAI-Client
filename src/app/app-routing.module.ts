@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
+import { SettingComponent } from './setting/setting.component';
 
 const routes: Routes = [
   { path: 'game', component: GameComponent, title: 'Othello ' },
   { path: 'auth', component: AuthComponent, title: 'Auth' },
+  { path: 'setting', component: SettingComponent, title: 'Setting' },
   { path: '', component: HomeComponent, title: 'Welcome to Othello/Reversi' },
 ];
 

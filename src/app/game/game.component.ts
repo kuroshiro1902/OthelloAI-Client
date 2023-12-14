@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GameFacade } from './game.facade';
 import { ICell } from '../shared/models/Cell.model';
 import { IMove } from '../shared/models/Move.model';
@@ -8,6 +9,7 @@ import { IGameStats } from '../shared/models/GameStats.model';
 import { IGameHistory } from '../shared/models/GameHistory.model';
 import { IAnalytics } from '../shared/models/Analytics.model';
 import { IMinimaxResult } from '../shared/models/MinimaxResult.model';
+import { IDepthSetting, SettingFacade } from '../setting/setting.facade';
 
 @Component({
   selector: 'app-game',
@@ -15,7 +17,10 @@ import { IMinimaxResult } from '../shared/models/MinimaxResult.model';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
+  username: string | null = null;
   playerOpt = EPlayer;
+
+  depthOpt = {} as IDepthSetting;
 
   isInitialLoading = true;
   isFetching = false;
@@ -33,17 +38,30 @@ export class GameComponent implements OnInit {
 
   mode: 'human' | 'ai' | 'ai_ai' = 'ai';
 
+  aiVersion: 'v1' | 'v2' = 'v2';
+
   winMessage: string | null = null;
 
-  depth: number = 1;
+  depth = this.depthOpt.easy;
 
   //ai vs ai mode
   isPaused: boolean = false;
   aiTimeoutId: any = null;
 
+  calculationTimeStart = 0;
+
   //analytics
-  analytics: IAnalytics = {};
-  constructor(private gameFacade: GameFacade) {}
+  analytics: IAnalytics = {
+    blackAmount: 2,
+    whiteAmount: 2,
+    positionCount: 0,
+    calculationTime: 0,
+  };
+  constructor(
+    private gameFacade: GameFacade,
+    private router: Router,
+    private settingFacade: SettingFacade
+  ) {}
 
   get historyString(): string {
     return this.historyStack
@@ -88,6 +106,12 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.username = localStorage.getItem('othello_username');
+    if (!!!this.username) this.router.navigate(['/']);
+    this.settingFacade.depthList$.subscribe((res) => {
+      this.depthOpt = res;
+      this.depth = this.depthOpt.easy;
+    });
     this.gameFacade.gameStats$.subscribe((res) => {
       this.gameStats = res;
       this.ntf = this.isStarted
@@ -96,6 +120,7 @@ export class GameComponent implements OnInit {
       this._assignResToGameStats(res!);
       this._enable();
     });
+    this.settingFacade.getDepthList();
     this.initial();
   }
 
@@ -104,8 +129,8 @@ export class GameComponent implements OnInit {
     this.winMessage = null;
     this.gameStats.currentPlayer = this.playerColor;
     this.selectedCell = undefined;
+    this.analytics.positionCount = 0;
     this.analytics = {};
-    console.log(this.gameStats.currentPlayer);
     this.gameFacade.initial(this.playerColor).subscribe((res) => {
       this.gameFacade.gameStats = res;
       this._pushIntoHistoryStack({ gameStats: res });
@@ -120,8 +145,6 @@ export class GameComponent implements OnInit {
     this.historyStack = [];
     this.historyStackIndex = 0;
     this.initial();
-    console.log(this.mode);
-
     if (this.mode === 'ai_ai' && this.isStarted) this.continueGame();
   }
 
@@ -157,20 +180,31 @@ export class GameComponent implements OnInit {
     this.analyze(res);
     if (Math.abs(res.evaluationValue) === 10 ** 7) {
       this.winCalculate(res.cells);
+    } else if (res.evaluationValue === 0) {
+      const { blackAmount, whiteAmount } = this.pieceCalculate(res.cells);
+      if (blackAmount + whiteAmount === 64) {
+        this.winCalculate(res.cells);
+      }
     } else if (this.mode === 'ai') {
       this._makeAIMove(res);
     }
   }
 
   _makeAIMove(res: IGameStats) {
+    this.calculationTimeStart = new Date().getTime();
     setTimeout(() => {
-      this.gameFacade.aiMove(res, this.depth).subscribe((minimaxRes) => {
-        this._handleAIMoveResponse(res, minimaxRes);
-      });
-    }, 100);
+      this.gameFacade
+        .aiMove(res, this.depth, this.aiVersion)
+        .subscribe((minimaxRes) => {
+          this._handleAIMoveResponse(res, minimaxRes);
+        });
+    }, 500);
   }
 
   _handleAIMoveResponse(res: IGameStats, minimaxRes: IMinimaxResult) {
+    this.analytics.positionCount = minimaxRes.positionCount.value;
+    this.analytics.calculationTime =
+      (new Date().getTime() - this.calculationTimeStart) / 1000;
     this.gameFacade
       .move(res.cells, res.currentPlayer, minimaxRes.bestMove)
       .subscribe((aiRes) => {
@@ -186,27 +220,30 @@ export class GameComponent implements OnInit {
   aiVsAi(res: IGameStats) {
     if (this.isStarted && !this.isPaused) {
       this.aiTimeoutId = setTimeout(() => {
-        this.gameFacade.aiMove(res, this.depth).subscribe((minimaxRes) => {
-          this.gameFacade
-            .move(res.cells, res.currentPlayer, minimaxRes.bestMove)
-            .subscribe((aiRes) => {
-              this._updateAfterMove(aiRes, minimaxRes.bestMove, false);
-              this.analyze(aiRes);
-              if (Math.abs(aiRes.evaluationValue) === 10 ** 7) {
-                this.winCalculate(aiRes.cells);
-              } else {
-                // Switch to the other AI and make a move
-                this.aiVsAi(aiRes);
-              }
-            });
-        });
+        this.gameFacade
+          .aiMove(res, this.depth, this.aiVersion)
+          .subscribe((minimaxRes) => {
+            this.analytics.positionCount = minimaxRes.positionCount.value;
+            this.gameFacade
+              .move(res.cells, res.currentPlayer, minimaxRes.bestMove)
+              .subscribe((aiRes) => {
+                this._updateAfterMove(aiRes, minimaxRes.bestMove, false);
+                this.analyze(aiRes);
+                if (Math.abs(aiRes.evaluationValue) === 10 ** 7) {
+                  this.winCalculate(aiRes.cells);
+                } else {
+                  // Switch to the other AI and make a move
+                  this.aiVsAi(aiRes);
+                }
+              });
+          });
       }, 1000);
     }
   }
 
   analyze(gameStats: IGameStats): void {
     const { blackAmount, whiteAmount } = this.pieceCalculate(gameStats.cells);
-    this.analytics = { blackAmount, whiteAmount };
+    this.analytics = { ...this.analytics, blackAmount, whiteAmount };
   }
 
   changeHistory(step: -1 | 1) {

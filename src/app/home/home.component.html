@@ -1,18 +1,41 @@
 <div id="home-background">
+  <div
+    *ngIf="username"
+    style="padding: 8px 4px; position: absolute; right: 36px; top: 8px"
+  >
+    <p>
+      Hello <strong>{{ username }}</strong
+      >.
+      <button
+        (click)="logout()"
+        style="
+          margin-left: 8px;
+          background-color: var(--color2);
+          color: var(--color9);
+        "
+      >
+        Logout
+      </button>
+    </p>
+  </div>
   <div class="main">
     <p><button (click)="play()">Play</button></p>
-    <p><button>Setting</button></p>
-    <p><button>API</button></p>
-    <p><button>Github</button></p>
+    <p><button (click)="setting()">Setting</button></p>
+    <p><button (click)="rule()">Rule</button></p>
+    <p><button (click)="docs()">API</button></p>
+    <p><button (click)="github()">Github</button></p>
   </div>
   <div class="copyright">
     <p style="display: flex; gap: 1rem">
-      <small><a href="#" target="_blank">Facebook</a></small>
-      <small><a href="#" target="_blank">Github</a> </small>
-      <small><a href="#" target="_blank">Linkedin</a> </small>
+      <small><a href="fb.com" target="_blank">Facebook</a></small>
+      <small
+        ><a href="https://github.com/kuroshiro1902/OthelloAI" target="_blank"
+          >Github</a
+        >
+      </small>
     </p>
-    <small
-      >Othello v1.0 Copyright by Team 10/Intelligent System PTIT 2023.</small
-    >
+    <small>
+      Othello v1.0 Copyright by Team 10/Intelligent System PTIT 2023.
+    </small>
   </div>
 </div>

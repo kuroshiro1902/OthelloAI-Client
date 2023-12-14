@@ -59,14 +59,15 @@ export class GameFacade {
     return this.moveService.move(cells, currentPlayer, move);
   }
 
-  aiMove(gameStats: IGameStats, depth = 1) {
+  aiMove(gameStats: IGameStats, depth = 1, aiVersion: 'v1' | 'v2') {
     //Kiểm tra xem thuật toán hiện tại là gì thì chọn thuật toán đó
     //if this.algorithm === "MINIMAX"
     return this.minimax(
       gameStats.cells,
       depth,
       gameStats.evaluationValue,
-      gameStats.currentPlayer
+      gameStats.currentPlayer,
+      aiVersion
     );
   }
 
@@ -74,13 +75,15 @@ export class GameFacade {
     cells: ICell[][],
     depth = 1,
     evaluationValue: number,
-    currentPlayer: EPlayer
+    currentPlayer: EPlayer,
+    version: 'v1' | 'v2'
   ) {
     return this.minimaxService.minimax(
       cells,
       depth,
       evaluationValue,
-      currentPlayer
+      currentPlayer,
+      version
     );
   }
 

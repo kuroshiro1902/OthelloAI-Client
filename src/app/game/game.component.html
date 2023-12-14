@@ -5,7 +5,7 @@
 </app-overlay>
 <app-overlay *ngIf="winMessage">
   <pre class="win-message" [innerHTML]="winMessage"></pre>
-  <button (click)="startGame(false)">Done</button>
+  <button (click)="winMessage = null">Done</button>
 </app-overlay>
 <div id="game" class="flex gap-normal">
   <div class="container left flex gap-normal">
@@ -28,7 +28,19 @@
           ></span
         >
         <br />
-        <span *ngIf="mode === 'ai'"
+        <span
+          >AI's position count:
+          <a style="color: var(--color6)">{{ analytics.positionCount }}</a>
+          moves
+        </span>
+        <br />
+        <span
+          >Calculation time:
+          <a style="color: var(--color1)">{{ analytics.calculationTime }}</a>
+          s</span
+        >
+        <br />
+        <span *ngIf="mode !== 'human'"
           >Level: <a style="color: var(--color9)">{{ level }}</a></span
         >
       </div>
@@ -44,7 +56,7 @@
       >
         <img src="assets/avatar.png" alt="Player1" />
         <div class="player-text">
-          <p class="player-name">Player1</p>
+          <p class="player-name">{{ username }}</p>
           <div class="your-turn">
             {{
               isStarted && gameStats.currentPlayer === playerColor
@@ -63,7 +75,7 @@
         "
       >
         <div class="player-text">
-          <p style="text-align: end">Player2</p>
+          <p style="text-align: end">AI</p>
           <div class="your-turn">
             {{
               isStarted && gameStats.currentPlayer !== playerColor
@@ -118,11 +130,26 @@
             [disabled]="isStarted || mode === 'human'"
             [(ngModel)]="depth"
           >
-            <option [ngValue]="1">Level: Easy</option>
-            <option [ngValue]="2">Level: Medium</option>
-            <option [ngValue]="3">Level: Hard</option>
-            <option [ngValue]="4">Level: Expert</option>
-            <option [ngValue]="5">Level: Master</option>
+            <option [ngValue]="depthOpt.easy">
+              Level: EASY (depth = {{ depthOpt.easy }})
+            </option>
+            <option [ngValue]="depthOpt.medium">
+              Level: MEDIUM (depth = {{ depthOpt.medium }})
+            </option>
+            <option [ngValue]="depthOpt.hard">
+              Level: HARD (depth = {{ depthOpt.hard }})
+            </option>
+            <option [ngValue]="depthOpt.master">
+              Level: MASTER (depth = {{ depthOpt.master }})
+            </option>
+          </select>
+          <select
+            class="select-btn"
+            [disabled]="isStarted || mode === 'human'"
+            [(ngModel)]="aiVersion"
+          >
+            <option [ngValue]="'v2'">Algorithm: MINIMAX V2 (Latest)</option>
+            <option [ngValue]="'v1'">Algorithm: MINIMAX V1 (Deprecated)</option>
           </select>
           <ng-container [ngSwitch]="isStarted">
             <ng-container *ngSwitchCase="true">
